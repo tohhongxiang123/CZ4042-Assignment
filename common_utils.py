@@ -72,20 +72,23 @@ class EarlyStopper:
 
 class MLP(nn.Module):
     def __init__(self, no_features, no_hidden, no_labels):
-        super().__init__()
+        super(MLP, self).__init__()
         self.mlp_stack = nn.Sequential(
+            # input
             nn.Linear(no_features, no_hidden),
-            nn.ReLU(),
 
-            nn.Dropout(0.2),
             nn.Linear(no_hidden, no_hidden),
             nn.ReLU(),
-
             nn.Dropout(0.2),
+
             nn.Linear(no_hidden, no_hidden),
             nn.ReLU(),
+            nn.Dropout(0.2),
+
+            nn.Linear(no_hidden, no_hidden),
+            nn.ReLU(),
+            nn.Dropout(0.2),
             
-            nn.Dropout(0.2),
             nn.Linear(no_hidden, no_labels),
             nn.Sigmoid()
         )
@@ -93,7 +96,7 @@ class MLP(nn.Module):
     # YOUR CODE HERE
     def forward(self, x):
         return self.mlp_stack(x)
-
+        
 class CustomDataset(Dataset):
     def __init__(self, features, labels):
         assert len(features) == len(labels)
